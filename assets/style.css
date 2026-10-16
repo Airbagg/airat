@@ -40,7 +40,7 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-img, video { display: block; max-width: 100%; }
+img, video { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
 h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.025em; text-wrap: balance; }
 p { margin: 0; text-wrap: pretty; }
@@ -65,7 +65,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .nav { display: none; gap: 26px; margin-left: auto; font-size: 14.5px; }
 .nav a, .top-tg { text-decoration: none; color: var(--ink-2); transition: color .2s; }
 .nav a:hover, .top-tg:hover { color: var(--ink); }
-.top-tg { margin-left: auto; font-size: 14.5px; font-weight: 500; color: var(--accent); }
+.lang { margin-left: auto; display: flex; gap: 2px; font-size: 13.5px; font-weight: 500; }
+.lang a, .lang b { padding: 4px 6px; border-radius: 6px; text-decoration: none; color: var(--muted); font-weight: 500; }
+.lang b { color: var(--ink); background: #ececea; }
+.lang a:hover { color: var(--ink); }
+.top-tg { margin-left: 14px; font-size: 14.5px; font-weight: 500; color: var(--accent); }
 .top-tg:hover { color: var(--accent-ink); }
 
 /* Первый экран */
@@ -126,6 +130,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .credit { margin-top: 18px; font-size: 14px; color: var(--muted); }
 .credit a { color: var(--ink-2); text-decoration-color: var(--line); text-underline-offset: 3px; }
 .credit a:hover { color: var(--ink); text-decoration-color: currentColor; }
+.wide img { width: 100%; height: auto; aspect-ratio: 2400 / 1500; object-fit: contain; }
 .wide { display: none; margin-top: 28px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #fff; }
 
 /* Телефон */
@@ -254,7 +259,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (min-width: 760px) {
   :root { --pad: 40px; }
   .nav { display: flex; }
-  .top-tg { margin-left: 8px; padding-left: 26px; border-left: 1px solid var(--line); }
+  .lang { margin-left: 8px; padding-left: 22px; border-left: 1px solid var(--line); }
+  .top-tg { margin-left: 18px; }
   .hero { padding-top: 0; margin-bottom: 136px; }
   .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 24px; }
   .hero-text { padding: 72px 0; }
@@ -302,3 +308,25 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .side { --w: 260px; }
   .stage { gap: 72px; }
 }
+
+/* Мобильная: работы листаются вбок, по точкам видно сколько экранов */
+@media (max-width: 759px) {
+  .stage {
+    --pw: min(290px, 70vw);
+    justify-content: flex-start; gap: 12px;
+    padding: 28px calc((100% - var(--pw)) / 2);
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .stage::-webkit-scrollbar { display: none; }
+  .stage .device { --w: var(--pw); scroll-snap-align: center; }
+  .stage .side { display: block; margin-top: 0; }
+  .stage .main { order: 0; }
+  .stage .side-l { order: 1; }
+  .stage .side-r { order: 2; }
+  .dots { display: flex; justify-content: center; gap: 7px; margin-top: 14px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); transition: background .25s, transform .25s; }
+  .dots i.on { background: var(--ink); transform: scale(1.15); }
+}
+@media (min-width: 760px) { .dots { display: none; } }

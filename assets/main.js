@@ -69,3 +69,28 @@
   }, { threshold: 0.2 });
   videos.forEach(function (v) { near.observe(v); vis.observe(v); });
 })();
+
+// Точки под листаемыми работами на телефоне
+(function () {
+  document.querySelectorAll('.stage').forEach(function (stage) {
+    var devs = stage.querySelectorAll('.device');
+    if (devs.length < 2) return;
+    var dots = document.createElement('div');
+    dots.className = 'dots';
+    dots.setAttribute('aria-hidden', 'true');
+    var order = Array.prototype.slice.call(devs).sort(function (a, b) {
+      return (parseInt(getComputedStyle(a).order) || 0) - (parseInt(getComputedStyle(b).order) || 0);
+    });
+    order.forEach(function (_, i) { var d = document.createElement('i'); if (!i) d.className = 'on'; dots.appendChild(d); });
+    stage.after(dots);
+    var raf = 0;
+    stage.addEventListener('scroll', function () {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function () {
+        var mid = stage.scrollLeft + stage.clientWidth / 2, best = 0, bd = 1e9;
+        order.forEach(function (d, i) { var c = d.offsetLeft + d.offsetWidth / 2, dd = Math.abs(c - mid); if (dd < bd) { bd = dd; best = i; } });
+        dots.querySelectorAll('i').forEach(function (el, i) { el.classList.toggle('on', i === best); });
+      });
+    }, { passive: true });
+  });
+})();
